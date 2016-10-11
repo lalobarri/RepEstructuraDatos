@@ -1,0 +1,13 @@
+package mx.edu.utng.hibernate03.orm;
+
+import java.io.Serializable;
+
+public class VentaDetalle implements Serializable{
+	private VentaDetalleId id = new VentaDetalleId();
+	private Producto producto;
+	private Venta venta;
+	private int cantidad;
+	
+	
+
+}

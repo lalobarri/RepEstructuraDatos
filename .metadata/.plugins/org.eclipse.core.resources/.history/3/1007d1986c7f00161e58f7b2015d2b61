@@ -1,0 +1,15 @@
+package arreglos_bi;
+
+public class JuegaAdivina {
+	public static void main(String[] args) {
+		Adivina  adiv=new Adivina();
+		adiv.defineArreglo();//Se definen los datos del arreglo
+		//mostrar el arreglo
+		for(int i=0;i<5;i++){
+			adiv.mostrarAdivinaza(0, i);
+		}
+		
+	}
+	
+
+}

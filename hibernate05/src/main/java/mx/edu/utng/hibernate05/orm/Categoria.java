@@ -1,0 +1,66 @@
+package mx.edu.utng.hibernate05.orm;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="Categoria")
+public class Categoria implements java.io.Serializable{
+	private int idCat;
+	private String nombre;
+	private String descripcion;
+	
+	/*private Set<Producto> productos = new HashSet<Producto>(0);*/
+	
+	public Categoria(){
+		
+	}
+	/*
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="categoria")
+	public Set<Producto> getProductos() {
+		return productos;
+	}
+	public void setProductos(Set<Producto> productos) {
+		this.productos = productos;
+	}*/
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	public int getIdCat() {
+		return idCat;
+	}
+	public void setIdCat(int idCat) {
+		this.idCat = idCat;
+	}
+	
+	@Column(length=20, nullable=false)
+	public String getNombre() {
+		return nombre;
+	}
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	@Column(length=200, nullable=false)
+	public String getDescripcion() {
+		return descripcion;
+	}
+	@Column
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+	@Override
+	public String toString() {
+		return "Categoria [idCat=" + idCat + ", nombre=" + nombre + ", descripcion=" + descripcion + "]";
+	}
+	
+
+}

@@ -1,0 +1,16 @@
+package pruebas;
+
+public class Principal {
+	private void psvm() {
+		Lista lista=new Lista();
+		lista.insertarInicio("Juan");
+		lista.insertarInicio("Pedro");
+		lista.insertarInicio("Miguel");
+		lista.insertarInicio("Javier");
+		lista.insertarInicio("Mario");
+		lista.Listar();
+		
+
+	}
+
+}

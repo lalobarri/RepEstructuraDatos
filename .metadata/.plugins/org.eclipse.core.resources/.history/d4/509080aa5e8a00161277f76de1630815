@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.edu.utng.hibernate03.orm.Producto" table="PRODUCTO">
+      <meta attribute="class-description">
+         This class contains the PRODUCTO detail. 
+      </meta>
+      <id name="idProd" type="int">
+        <column name="idProd" />
+        <generator class="native"/>
+      </id>
+      <property name="nombre"  type="string">
+      	<column name="nombre" length="20" not-null="true"></column>
+      </property>
+      <property name="descripcion"  type="string">
+        <column name="descripcion" length="200" not-null="true"></column>
+      </property>
+      <property name="precio"  type="float">
+        <column name="precio"  not-null="true"></column>
+      </property>
+      <!-- Falta terminar el mapeo de categoria -->
+      <many-to-one name="categoria" class="mx.edu.utng.hibernate03.orm.Categoria" fetch="select">
+      	<column name="idCat" not-null="true"></column>
+      </many-to-one>
+      
+    
+   </class>
+</hibernate-mapping>

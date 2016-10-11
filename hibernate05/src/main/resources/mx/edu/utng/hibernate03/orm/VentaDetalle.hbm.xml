@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.edu.utng.hibernate03.orm.VentaDetalle" table="VENTADETALLE">
+      <meta attribute="class-description">
+         This class contains the VENTA DETALLE detail. 
+      </meta>
+      <composite-id name="id" class="mx.edu.utng.hibernate03.orm.VentaDetalleId">
+      	<key-property name="idProd" column="idProd" type="integer"></key-property>
+      	<key-property name="idVen" column="idVen" type="integer"></key-property>
+      </composite-id>
+      
+      <property name="cantidad" type="int">
+        <column name="cantidad" not-null="true"/>
+      </property>
+      
+      <many-to-one name="venta" class="mx.edu.utng.hibernate03.orm.Venta"  insert="false" update="false" fetch="select">
+      	<column name="idVen" not-null="true"></column>
+      </many-to-one>
+      <many-to-one name="producto" class="mx.edu.utng.hibernate03.orm.Producto" insert="false" update="false" fetch="select">
+      	<column name="idProd" not-null="true"></column>
+      </many-to-one>
+            
+      
+    
+   </class>
+</hibernate-mapping>

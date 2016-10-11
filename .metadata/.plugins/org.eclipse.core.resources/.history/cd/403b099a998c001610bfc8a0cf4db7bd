@@ -1,0 +1,360 @@
+package mx.edu.utng.hibernate06;
+
+import java.util.List;
+
+import javax.persistence.PersistenceException;
+
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.LogicalExpression;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
+
+import mx.edu.utng.hibernate05.dao.CategoriaDAO;
+import mx.edu.utng.hibernate05.orm.Categoria;
+import mx.edu.utng.hibernate05.services.CategoriaService;
+
+/**
+ * Hello world!
+ *
+ */
+public class App {
+
+	public static void testDAO() {
+		CategoriaService catService = new CategoriaService();
+		Categoria cat = new Categoria();
+		cat.setIdCat(1);
+		cat.setNombre("Electrónica");
+		cat.setDescripcion("Artículos eléctricos");
+
+		catService.persist(cat);
+		System.out.println("Se registro la categoria " + cat);
+
+		cat.setNombre("hogar");
+		catService.update(cat);
+		System.out.println("Se actualizó la categoría: " + cat);
+
+		System.out.println("Hay registradas " + catService.findAll().size() + " categorías.");
+
+		cat = catService.findById(cat.getIdCat());
+		System.out.println("Se recuperó la categoría: " + cat);
+
+		catService.delete(cat);
+		System.out.println("Se eliminó la categoría " + cat.getNombre() + " quedan " + catService.findAll().size()
+				+ " categorias.");
+
+		System.out.println("Eliminando todas las categorías ...");
+		try {
+			catService.deleteAll();
+			System.out.println("Echo, categorías eliminadas... ");
+			System.out.println("Quedan: " + catService.findAll().size() + "categorias registradas. ");
+		} catch (PersistenceException he) {
+			System.out.println("Error no se pudieron eliminar las categoría");
+		}
+	}
+	
+	public static void testHQL(){
+		
+		CategoriaDAO catDAO=new CategoriaDAO();
+		String hql ="FROM Categoria";
+		Query<Categoria> query = catDAO.openCurrentSession().createQuery(hql, Categoria.class);
+		List<Categoria> lista = query.getResultList();
+		System.out.println("Categorias registradas: "+lista);
+		System.out.println("Numero de registros: "+lista.size());
+		
+		hql="FROM mx.edu.utng.hibernate05.orm.Categoria";
+		query = catDAO.openCurrentSession().createQuery(hql, Categoria.class);
+		lista = query.getResultList();
+		System.out.println("Categorias registradas: "+ lista);
+		
+		hql="FROM Categoria AS C";
+		query = catDAO.openCurrentSession().createQuery(hql, Categoria.class);
+		lista = query.getResultList();
+		System.out.println("Categorias registradas: "+ lista);
+		
+		hql="FROM Categoria  C";
+		query = catDAO.openCurrentSession().createQuery(hql, Categoria.class);
+		lista = query.getResultList();
+		System.out.println("Categorias registradas: "+ lista);
+		
+		hql="SELECT C.idCat, C.nombre FROM Categoria  C";
+		Query query2 = catDAO.openCurrentSession().createQuery(hql);
+		List<Object[]> lista2 = query2.getResultList();
+		for (Object[] objects : lista2) {
+			System.out.println("id: " + objects[0]);
+			System.out.println("nombre: " + objects[1]);
+		}
+		
+		hql="SELECT C.idCat, C.nombre FROM Categoria  C WHERE C.idCat = 1";
+		query2 = catDAO.openCurrentSession().createQuery(hql);
+		lista2 = query2.getResultList();
+		for (Object[] objects : lista2) {
+			System.out.println("id: " + objects[0]);
+			System.out.println("nombre: " + objects[1]);
+		}
+		
+		hql="FROM Categoria C WHERE C.idCat < 7 ORDER BY C.idCat DESC";
+		query = catDAO.openCurrentSession().createQuery(hql, Categoria.class);
+		lista = query.getResultList();
+		System.out.println( lista);
+		
+		hql="FROM Categoria C WHERE C.idCat < 7 ORDER BY C.nombre DESC, C.descripcion ASC";
+		query = catDAO.openCurrentSession().createQuery(hql, Categoria.class);
+		lista = query.getResultList();
+		System.out.println( lista);
+		
+	}
+	
+	public static void testHQL2(){
+		CategoriaDAO catDAO = new CategoriaDAO();
+		String hql = "SELECT  C.nombre, SUM(C.idCat) FROM Categoria C GROUP BY nombre";
+		Query query= catDAO.openCurrentSessionwithTransaction().createQuery(hql);
+		List<Object[]> lista = query.getResultList();
+		for (Object[] objects : lista) {
+			System.out.println("Suma " + objects[0]+"..." + objects[1]);
+		}
+		
+		hql="FROM Categoria C WHERE C.idCat = :cat_id";
+		Query<Categoria> query2 = catDAO.getCurrentSession().createQuery(hql, Categoria.class);
+		query2.setParameter("cat_id", 10);
+		List<Categoria> lista2 = query2.getResultList();
+		System.out.println(lista2);
+		
+		//catDAO.getCurrentSession().beginTransaction().begin();
+		
+		hql="UPDATE Categoria C SET C.descripcion = :descripcion_cat WHERE idCat=:id_cat";
+		query = catDAO.getCurrentSession().createQuery(hql);
+		query.setParameter("id_cat", 1);
+		query.setParameter("descripcion_cat", "Otra Cosa");
+		int result = query.executeUpdate();
+		
+		System.out.println("Filas afectadas: "+result);
+		
+		
+		hql="DELETE FROM Categoria  WHERE idCat=:id_cat";
+		query = catDAO.getCurrentSession().createQuery(hql);
+		query.setParameter("id_cat", 1);
+		try{
+			result = query.executeUpdate();
+		
+			System.out.println("Filas afectadas: "+result);
+		}catch(HibernateException he){
+			System.out.println("Fallo registro a eliminar registro");
+		}
+		
+		
+		hql="INSERT INTO Categoria (nombre, descripcion) SELECT nombre, primAp FROM Cliente WHERE idClt<4";
+		query = catDAO.getCurrentSession().createQuery(hql);
+		result = query.executeUpdate();
+	    System.out.println("Filas afectadas: "+result);
+	    
+	    
+	    
+		hql = "SELECT  count(distinct C.nombre) FROM Categoria C";
+		query= catDAO.getCurrentSession().createQuery(hql);
+		lista = query.getResultList();
+		System.out.println("Categorias total: "+lista.get(0));
+		
+		hql = "SELECT  count(C.nombre) FROM Categoria C";
+		query= catDAO.getCurrentSession().createQuery(hql);
+		List<Long> lista3 = query.getResultList();
+		Long total=lista3.get(0);
+		System.out.println("Categorias total: "+total);
+		
+		hql="FROM Categoria";
+		query = catDAO.getCurrentSession().createQuery(hql, Categoria.class);
+		int n=8; //numero de elementos por página
+		//Calcular el numero de páginas a mostrar
+		Long paginas = (total%n>0) ? total/n +1:total/n;
+		query.setMaxResults(n); //mostrar solo de 8 en 8
+		
+		for(int paginaActual=0;paginaActual<paginas; paginaActual++){
+			//Se epecifica el primer registro a mostrar en la consulta
+			query.setFirstResult((int)(paginaActual*n));
+			lista2=query.getResultList();
+			System.out.println("Pagina " + (paginaActual+1));
+			System.out.println(lista2);
+			int i=1;
+			for (Categoria cat: lista2) {
+				System.out.println(i++ +" "+cat);
+			}
+		}
+		
+		
+		
+		catDAO.getCurrentSession().getTransaction().commit();
+		catDAO.getCurrentSession().close();
+		
+		
+		
+	}
+	
+	private static void testCriteria(){
+		CategoriaDAO catDAO = new CategoriaDAO();
+		
+		@SuppressWarnings("deprecation")
+		Criteria cr=catDAO.openCurrentSessionwithTransaction().createCriteria(Categoria.class);
+		
+		//Listar todas las categorias
+		System.out.println(cr.list());
+		
+		//Traer sólo las que tienen un nombre en específico
+		cr.add(Restrictions.gt("nombre", "Electrónica"));
+		System.out.println(cr.list());
+		
+		//Traer los mayores a 20
+		cr = catDAO.getCurrentSession().createCriteria(Categoria.class);
+		cr.add(Restrictions.gt("idCat", 20));
+		System.out.println(cr.list());
+		
+		//Traer los menores a 20
+		cr = catDAO.getCurrentSession().createCriteria(Categoria.class);
+		cr.add(Restrictions.lt("idCat", 20));
+		System.out.println(cr.list());
+		
+		//Seleccionar con subcadena
+		cr = catDAO.getCurrentSession().createCriteria(Categoria.class);
+		cr.add(Restrictions.like("nombre", "El%"));
+		System.out.println(cr.list());
+		
+		//Sensible a mayúsculas
+		cr = catDAO.getCurrentSession().createCriteria(Categoria.class);
+		cr.add(Restrictions.ilike("nombre", "jua%"));
+		System.out.println(cr.list());
+		
+		//Seleccionar un rango
+		cr = catDAO.getCurrentSession().createCriteria(Categoria.class);
+		cr.add(Restrictions.between("idCat", 20, 50));
+		System.out.println(cr.list());
+		
+		//Traer si es nulo
+		cr = catDAO.getCurrentSession().createCriteria(Categoria.class);
+		cr.add(Restrictions.isNull("nombre"));
+		System.out.println(cr.list());
+	}
+	
+	private static void testLogicalExpression(){
+		CategoriaDAO catDAO=new CategoriaDAO();
+		Session session = catDAO.openCurrentSessionwithTransaction();
+		
+		Criteria cr=session.createCriteria(Categoria.class);
+		Criterion crIdMayor = Restrictions.gt("idCat", 10);
+		Criterion crNombre = Restrictions.ilike("nombre", "ju%");
+		
+		LogicalExpression orExp=Restrictions.or(crIdMayor, crNombre);
+		
+		cr.add(orExp);
+		System.out.println(cr.list());
+		
+		LogicalExpression andExp=Restrictions.and(crIdMayor, crNombre);
+		cr=session.createCriteria(Categoria.class);
+		cr.add(andExp);
+		System.out.println(cr.list());
+		
+		catDAO.getCurrentSession().getTransaction().commit();
+		catDAO.getCurrentSession().close();
+		
+	}
+	
+	private static void testPaginacion(){
+		CategoriaDAO catDAO=new CategoriaDAO();
+		Session session = catDAO.openCurrentSessionwithTransaction();
+		
+		String hql="SELECT count(C.nombre) FROM Categoria C";
+		Long total = (Long)session.createQuery(hql).getSingleResult();
+		System.out.println("Categorias total: "+total);
+		
+		int n=8; //número de elementos por pagina
+		
+		Long paginas = (total%n>0) ? total/n +1:total/n;
+		Criteria cr=session.createCriteria(Categoria.class);
+		cr.setMaxResults(n); //mostrar solo de 8 en 8
+		 
+		for(int paginaActual=0;paginaActual<paginas; paginaActual++){
+			//Se epecifica el primer registro a mostrar en la consulta
+			cr.setFirstResult((int)(paginaActual*n));
+			List<Categoria> lista = cr.list();
+			System.out.println("Pagina " + (paginaActual+1));
+			
+			int i=1;
+			for (Categoria cat: lista) {
+				System.out.println(i++ +" "+cat);
+			}
+		}
+		catDAO.getCurrentSession().getTransaction().commit();
+		catDAO.getCurrentSession().close();
+
+	}
+	
+	
+	private static void testProyecciones(){
+		CategoriaDAO catDAO=new CategoriaDAO();
+		Session session = catDAO.openCurrentSessionwithTransaction();
+		
+		Criteria cr=session.createCriteria(Categoria.class);
+		cr.setProjection(Projections.rowCount());
+		System.out.println("Total de registros"+cr.uniqueResult());
+		
+		cr=session.createCriteria(Categoria.class);
+		cr.setProjection(Projections.avg("idCat"));
+		System.out.println("Promedio de id: "+cr.uniqueResult());
+		
+		cr=session.createCriteria(Categoria.class);
+		cr.setProjection(Projections.countDistinct("nombre"));
+		System.out.println("Total de registros distintos:"+cr.uniqueResult());
+		
+		cr=session.createCriteria(Categoria.class);
+		cr.setProjection(Projections.max("idCat"));
+		System.out.println("El máximo Id:"+cr.uniqueResult());
+		
+		cr=session.createCriteria(Categoria.class);
+		cr.setProjection(Projections.min("idCat"));
+		System.out.println("El mínimo Id:"+cr.uniqueResult());
+		
+		cr=session.createCriteria(Categoria.class);
+		cr.setProjection(Projections.sum("idCat"));
+		System.out.println("La suma de los Id:"+cr.uniqueResult());
+		
+		catDAO.getCurrentSession().getTransaction().commit();
+		catDAO.getCurrentSession().close();
+		
+		//Java comunity process los criterios de JPA y Hibernate
+		//Consultar también el maven repository
+	}
+	
+	protected static void testSQL(){
+		CategoriaDAO catDAO=new CategoriaDAO();
+		Session session = catDAO.openCurrentSessionwithTransaction();
+		
+		String sql = "SELECT {categoria.*} from Categoria categoria";
+		SQLQuery<Categoria> sqlQuery = session.createSQLQuery(sql);
+		sqlQuery.addEntity("categoria", Categoria.class);
+		System.out.println(sqlQuery.getResultList());
+		
+		sql = "SELECT count(*) AS total from Categoria";
+		sqlQuery = session.createSQLQuery(sql);
+		sqlQuery.addScalar("total",new org.hibernate.type.DoubleType());
+		System.out.println(sqlQuery.getSingleResult());
+		
+		
+		
+		
+		catDAO.getCurrentSession().getTransaction().commit();
+		catDAO.getCurrentSession().close();
+		
+	}
+
+	public static void main(String[] args) {
+		//testLogicalExpression();
+		//testPaginacion();
+		//testProyecciones();
+		testSQL();
+		HibernateUtils.shutdown();
+	}
+
+}

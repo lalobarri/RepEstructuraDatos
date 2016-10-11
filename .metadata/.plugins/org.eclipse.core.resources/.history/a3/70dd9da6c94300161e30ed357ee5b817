@@ -1,0 +1,21 @@
+package exercise11;
+import java.util.Scanner;
+public class StringMan {
+	public static void main(String[] args) {
+		System.out.println("Enter the values separated by blanks");
+		Scanner keyboard = new Scanner(System.in);
+		int result = 0;
+		int cntr = 0;
+		result += keyboard.nextInt();
+		cntr++;
+		System.out.println(cntr + ": " + result);
+		result += keyboard.nextInt();
+		cntr++;
+		System.out.println(cntr + ": " + result);
+		result += keyboard.nextInt();
+		cntr++;
+		System.out.println(cntr + ": " + result);
+
+	}
+
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.edu.utng.hibernate03.orm.Venta" table="VENTA">
+      <meta attribute="class-description">
+         This class contains the VENTA detail. 
+      </meta>
+      <id name="idVen" type="int">
+        <column name="idVen" />
+        <generator class="native"/>
+      </id>
+      <property name="fecha"  type="date">
+      	<column name="fecha"  not-null="true"></column>
+      </property>
+      
+      <!-- Falta terminar el mapeo de categoria -->
+      <many-to-one name="cliente" class="mx.edu.utng.hibernate03.orm.Cliente" fetch="select">
+      	<column name="idClt" not-null="true"></column>
+      </many-to-one>
+      
+      <set name="productos" table="Producto" inverse="false" lazy="true" fetch="select" cascade="all">
+      	<key>
+      		<column name="idVen" not-null="true"></column>
+      	</key>
+      	<many-to-many entity-name="mx.edu.utng.hibernate03.orm.Producto">
+      		<column name="idProd" not-null="true"></column>
+      	</many-to-many>
+      </set>
+      
+    
+   </class>
+</hibernate-mapping>

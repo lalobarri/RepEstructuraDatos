@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.edu.utng.hibernate2.orm.Contrato" table="CONTRATO">
+      <meta attribute="class-description">
+         This class contains the contrato detail. 
+      </meta>
+      <id name="id" type="int">
+        <column name="CLT_ID" />
+        <generator class="foreign">
+        	<param name="property">cliente</param>
+        </generator>
+      </id>
+      <one-to-one name="cita" class="mx.edu.utng.hibernate2.orm.Cliente" constrained="true"></one-to-one>
+      
+      <property name="puesto"  type="string">
+      	<column name="CON_PUESTO" length="20" not-null="true"></column>
+      </property>
+      <property name="inicio"  type="date">
+        <column name="CON_INICIO"  not-null="true"></column>
+      </property>
+      
+      <!--  
+      <property name="nacimiento"  type="date">
+      	<column name="CLT_NACIMIENTO" not-null="true"></column>
+      </property> -->
+      
+      
+   </class>
+</hibernate-mapping>

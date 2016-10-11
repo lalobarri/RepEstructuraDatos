@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.edu.utng.hibernate03.orm.Categoria" table="CATEGORIA">
+      <meta attribute="class-description">
+         This class contains the CATEGORIA detail. 
+      </meta>
+      <id name="idCat" type="int">
+        <column name="idCat" />
+        <generator class="native"/>
+      </id>
+      <property name="nombre"  type="string">
+      	<column name="nombre" length="20" not-null="true"></column>
+      </property>
+      <property name="descripcion"  type="string">
+        <column name="descripcion" length="200" not-null="true"></column>
+      </property>
+      
+      
+      <set name="productos" table="productos">
+      	<key>
+      		<column name="idcat" not-null="true"></column>
+      	</key>
+      	<one-to-many  class="mx.edu.utng.hibernate03.orm.Producto" ></one-to-many>
+      </set>
+    
+   </class>
+</hibernate-mapping>

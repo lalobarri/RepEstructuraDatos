@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.edu.utng.hibernate03.orm.Cliente" table="Cliente">
+      <meta attribute="class-description">
+         This class contains the CLIENTE detail. 
+      </meta>
+      <id name="idClt" type="int">
+        <column name="idClt" />
+        <generator class="native"/>
+      </id>
+      <property name="nombre"  type="string">
+      	<column name="nombre" length="20" not-null="true"></column>
+      </property>
+      <property name="primAp"  type="string">
+        <column name="primAp" length="20" not-null="true"></column>
+      </property>
+      <property name="segAp"  type="string">
+        <column name="segAp" length="20" not-null="true"></column>
+      </property>
+      
+      
+      <set name="ventas" table="venta">
+      	<key>
+      		<column name="idClt" not-null="true"></column>
+      	</key>
+      	<one-to-many  class="mx.edu.utng.hibernate03.orm.Venta" ></one-to-many>
+      </set>
+    
+   </class>
+</hibernate-mapping>

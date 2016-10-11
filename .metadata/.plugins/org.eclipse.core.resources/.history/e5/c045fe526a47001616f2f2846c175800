@@ -1,0 +1,26 @@
+package exercise12;
+import java.util.Scanner;
+ class Exercise12 {
+	
+	 public static void main (String [] args) {
+			Scanner kb = new Scanner(System.in);
+			System.out.println("Please enter data.");
+			String inputLine = kb.nextLine().trim();
+			while (inputLine.length() > 0) {
+				System.out.println("User input: " + inputLine);
+				Scanner inputScanner = new Scanner(inputLine);
+				String str1 = inputScanner.next();
+				System.out.println("String1: " + str1);
+				String str2 = inputScanner.next();
+				System.out.println("String2: " + str2);
+				String str3 = inputScanner.next();
+				System.out.println("String3: " + str3);
+				System.out.println("Please enter data.");
+				inputLine = kb.nextLine().trim();
+			}
+			System.out.println("The loop has ended.");
+		}
+
+
+
+}

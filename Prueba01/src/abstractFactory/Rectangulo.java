@@ -1,0 +1,35 @@
+package abstractFactory;
+
+public class Rectangulo extends Figura {
+	private float ladoB;
+	public Rectangulo(float ladoA, float ladoB) {
+		super(ladoA);
+		this.ladoB=ladoB;
+		
+		// TODO Auto-generated constructor stub
+	}
+	
+	public void setLadoB(float ladoB) {
+		this.ladoB = ladoB;
+	}
+	public float getLadoB() {
+		return ladoB;
+	}
+	@Override
+	public void calculaArea() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void calculaPerimetro() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public String toString() {
+		return "Rectangulo [ladoB=" + ladoB +  super.toString() + "]";
+	}
+	
+
+}

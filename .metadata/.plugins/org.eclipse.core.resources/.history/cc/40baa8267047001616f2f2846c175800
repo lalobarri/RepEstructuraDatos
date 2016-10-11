@@ -1,0 +1,26 @@
+package exercise12;
+import java.util.Scanner;
+ class Exercise12 {
+	
+	 public static void main (String [] args) {
+			Scanner kb = new Scanner(System.in);
+			System.out.println("Please enter data.");
+			String inputLine = kb.nextLine().trim();
+			while (inputLine.length() > 0) {
+				System.out.println("User input: " + inputLine);
+				int separator = inputLine.indexOf("±");
+				String str1 = inputLine.substring(0,separator);//¿Qué parametros? 1.33 ±0.01
+				System.out.println("Value1: " + str1);
+				String str2 = inputLine.substring(separator+1);//Otro parametro
+				System.out.println("Value2: " + str2);			
+				System.out.println("Please enter data.");
+				inputLine = kb.nextLine().trim();
+			}
+			System.out.println("The loop has ended.");
+		}
+
+
+
+
+
+}

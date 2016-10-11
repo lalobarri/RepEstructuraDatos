@@ -1,0 +1,6 @@
+5
+Pedro 8
+Juan 7
+Miguel 10
+Mario 9
+Antonio 6

@@ -1,0 +1,62 @@
+package mx.edu.utng.hibernate06.orm;
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+@Entity
+public class TipoContacto implements Serializable{
+	private int idTipoCont;
+	private String nombre;
+	private Set<Contacto> contactos = new HashSet<Contacto>();
+	
+	public TipoContacto() {
+		super();
+	}
+
+	public TipoContacto(int idTipoCont, String nombre) {
+		super();
+		this.idTipoCont = idTipoCont;
+		this.nombre = nombre;
+		/*this.contactos = contactos;*/
+	}
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	public int getIdTipoCont() {
+		return idTipoCont;
+	}
+	
+	public void setIdTipoCont(int idTipoCont) {
+		this.idTipoCont = idTipoCont;
+	}
+	
+	@Column (length=20, nullable=false)
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
+
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="tipoCont")
+	public Set<Contacto> getContactos() {
+		return contactos;
+	}
+
+	public void setContactos(Set<Contacto> contactos) {
+		this.contactos = contactos;
+	}
+	
+}

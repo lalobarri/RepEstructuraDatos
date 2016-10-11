@@ -1,0 +1,17 @@
+package Command;
+
+public class Prueba {
+	public static void main(String[] args) {
+		
+		Command command = new UsaCelular(new Celular());
+		Invoker celUno = new Invoker(command);
+		celUno.run();
+		
+		System.out.println();
+		
+		Command command2 = new UsaComputadora(new Computadora());
+		Invoker compuUno = new Invoker(command2);
+		compuUno.run();
+	}
+
+}

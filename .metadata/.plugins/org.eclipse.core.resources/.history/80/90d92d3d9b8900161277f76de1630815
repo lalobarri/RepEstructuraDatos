@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.edu.utng.hibernate2.orm.Cita" table="CITA">
+      <meta attribute="class-description">
+         This class contains the cita detail. 
+      </meta>
+      <id name="id" type="int">
+        <column name="CIT_ID" />
+        <generator class="native"/>
+      </id>
+      <property name="nombre"  type="string">
+      	<column name="CIT_TITULO" length="20" not-null="true"></column>
+      </property>
+      <property name="direccion"  type="date">
+        <column name="CIT_FECHA"  not-null="true"></column>
+      </property>
+      
+      <one-to-one name="cliente" class="mx.edu.utng.hibernate2.Cliente" cascade="save-update"></one-to-one>
+      
+      <!--  
+      <property name="nacimiento"  type="date">
+      	<column name="CLT_NACIMIENTO" not-null="true"></column>
+      </property> -->
+      
+      
+   </class>
+</hibernate-mapping>

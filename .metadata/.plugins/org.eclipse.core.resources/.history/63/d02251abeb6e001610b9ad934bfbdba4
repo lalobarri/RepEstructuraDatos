@@ -1,0 +1,33 @@
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+
+public class Ejercicio_01 {
+	static final String DATA_PATH="datos.txt";
+	
+	public static void main(String[] args) {
+		Scanner fileReader=null;
+		try{
+			fileReader = new Scanner(new File(DATA_PATH));
+			System.out.println("Archivo Abierto: " + fileReader);
+			
+		}catch(FileNotFoundException e){
+			System.out.println("El archivo " +DATA_PATH +
+					" No se encuentra!!!");
+			System.out.println("Programa Terminado");
+			System.exit(0);
+		}
+		
+		int contador=1;
+		int datoLeido=fileReader.nextInt();
+		System.out.println("Palas Cargadoras 78345");
+		while (datoLeido==78345){
+			datoLeido=fileReader.nextInt();
+			System.out.println(contador + ": serie: " +datoLeido);
+			datoLeido=fileReader.nextInt();
+			contador++;
+		}
+	}
+	
+
+}

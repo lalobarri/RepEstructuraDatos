@@ -1,0 +1,112 @@
+package mx.edu.utng.hibernate05;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.PersistenceException;
+
+import org.hibernate.HibernateException;
+import org.hibernate.query.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.exception.ConstraintViolationException;
+
+import mx.edu.utng.hibernate05.dao.CategoriaDAO;
+import mx.edu.utng.hibernate05.orm.Categoria;
+import mx.edu.utng.hibernate05.orm.Cliente;
+import mx.edu.utng.hibernate05.orm.Contacto;
+import mx.edu.utng.hibernate05.orm.ContactoId;
+import mx.edu.utng.hibernate05.orm.Facturacion;
+import mx.edu.utng.hibernate05.orm.Producto;
+import mx.edu.utng.hibernate05.orm.TipoContacto;
+import mx.edu.utng.hibernate05.orm.Venta;
+import mx.edu.utng.hibernate05.orm.VentaDetalle;
+import mx.edu.utng.hibernate05.orm.VentaDetalleId;
+import mx.edu.utng.hibernate05.services.CategoriaService;
+
+/**
+ * Hello world!
+ *
+ */
+public class App {
+
+	public static void testDAO() {
+		CategoriaService catService = new CategoriaService();
+		Categoria cat = new Categoria();
+		cat.setIdCat(1);
+		cat.setNombre("Electrónica");
+		cat.setDescripcion("Artículos eléctricos");
+
+		catService.persist(cat);
+		System.out.println("Se registro la categoria " + cat);
+
+		cat.setNombre("hogar");
+		catService.update(cat);
+		System.out.println("Se actualizó la categoría: " + cat);
+
+		System.out.println("Hay registradas " + catService.findAll().size() + " categorías.");
+
+		cat = catService.findById(cat.getIdCat());
+		System.out.println("Se recuperó la categoría: " + cat);
+
+		catService.delete(cat);
+		System.out.println("Se eliminó la categoría " + cat.getNombre() + " quedan " + catService.findAll().size()
+				+ " categorias.");
+
+		System.out.println("Eliminando todas las categorías ...");
+		try {
+			catService.deleteAll();
+			System.out.println("Echo, categorías eliminadas... ");
+			System.out.println("Quedan: " + catService.findAll().size() + "categorias registradas. ");
+		} catch (PersistenceException he) {
+			System.out.println("Error no se pudieron eliminar las categoría");
+		}
+	}
+	
+	public static void testHQL(){
+		
+		CategoriaDAO catDAO=new CategoriaDAO();
+		String hql ="FROM Categoria";
+		Query<Categoria> query = catDAO.openCurrentSession().createQuery(hql, Categoria.class);
+		List<Categoria> lista = query.getResultList();
+		System.out.println("Categorias registradas: "+lista);
+		System.out.println("Numero de registros: "+lista.size());
+		
+		hql="FROM mx.edu.utne.hibernate05.orm.Categoria";
+		query = catDAO.openCurrentSession().createQuery(hql, Categoria.class);
+		lista = query.getResultList();
+		System.out.println("Categorias registradas: "+ lista);
+		
+		hql="FROM Categoria AS C";
+		query = catDAO.openCurrentSession().createQuery(hql, Categoria.class);
+		lista = query.getResultList();
+		System.out.println("Categorias registradas: "+ lista);
+		
+		hql="FROM Categoria  C";
+		query = catDAO.openCurrentSession().createQuery(hql, Categoria.class);
+		lista = query.getResultList();
+		System.out.println("Categorias registradas: "+ lista);
+		
+		hql="SELECT C.idCat, C.nombre FROM Categoria  C";
+		Query query2 = catDAO.openCurrentSession().createQuery(hql, Categoria.class);
+		List<Object> lista2 = query2.getResultList();
+		for (Object object : lista2) {
+			System.out.println("id "+ object.toString());
+		}
+		
+		System.out.println("Categorias registradas: "+ lista);
+		
+		
+		
+		
+	}
+
+	public static void main(String[] args) {
+		testHQL();
+		HibernateUtils.shutdown();
+	}
+
+}

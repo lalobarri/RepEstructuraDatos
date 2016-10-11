@@ -1,0 +1,7 @@
+INDEX VERSION 1.3+C:\Users\Lalo\workspace\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+2954038271.index
+596431066.index
+1231807194.index
+576897754.index
+379798397.index
+1964282802.index

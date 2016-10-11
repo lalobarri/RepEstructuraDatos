@@ -1,0 +1,13 @@
+package mx.edu.utng.hibernate03.orm;
+
+import java.util.Date;
+
+public class Venta {
+	private int idVen;
+	private Date fecha;
+	private Cliente cliente;
+	
+	
+	
+
+}
